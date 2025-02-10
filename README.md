@@ -2,6 +2,21 @@
 
 一个基于 Cloudflare Workers 的文件分享和代理下载服务。支持直接代理下载、生成短链接分享，以及 AList 文件的在线预览。
 
+## 📸 预览
+
+### 文件列表预览
+![文件列表预览](./images/file-list.png)
+
+### 文件信息页面
+![文件信息页面](./images/file-info.png)
+
+### 访问码验证
+![访问码验证](./images/access-code.png)
+
+### 管理后台
+![管理后台](./images/admin-panel.png)
+
+
 ## 🚀 特性
 
 - 支持直接代理任意 HTTP/HTTPS 链接下载
