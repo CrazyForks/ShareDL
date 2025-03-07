@@ -1,6 +1,6 @@
 # ShareDL
 
-一个基于 Cloudflare Workers 的文件分享和代理下载服务。支持直接代理下载、生成短链接分享，以及 AList 文件的在线预览。
+一个基于 Cloudflare Workers 的文件分享和代理下载服务。支持直接代理下载、生成短链接分享，以及多种文件源的在线预览。
 
 ## 📸 预览
 
@@ -19,11 +19,15 @@
 
 ## 🚀 特性
 
-- 支持直接代理任意 HTTP/HTTPS 链接下载
+- 支持多种文件源：
+  - 直接 HTTP/HTTPS 链接
+  - GitHub 文件和 Releases
+  - AList 文件/文件夹
+- 支持直接代理下载
 - 支持生成文件/文件夹的短链接分享
 - 支持访问次数限制和有效期设置
 - 支持访问码保护
-- 支持 AList 文件夹的在线预览和分享
+- 支持文件在线预览和分享
 - 支持管理后台，可搜索和管理短链接
 - 智能的地区访问控制
 
@@ -43,6 +47,12 @@ ALIST_API_URL: https://alist.example.com
 
 # AList 的访问令牌，在 AList 管理后台获取
 ALIST_TOKEN: alist_token_xxxxxxxxxxxxx
+
+# GitHub 访问令牌（可选）
+# - 用于提高 API 访问限制
+# - 支持访问私有仓库
+# - 在 GitHub Settings -> Developer settings -> Personal access tokens 中生成
+GITHUB_TOKEN: ghp_xxxxxxxxxxxxxxxx
 
 # 管理页面的访问路径，建议设置为随机字符串
 ADMIN_PATH: /admin_123456
@@ -72,14 +82,53 @@ https://dl.example.com/proxy/https://example.com/file.zip
 
 ### 短链接使用说明
 
-创建短链接时支持两种输入方式：
+创建短链接时支持以下输入方式：
 
-1. 文件链接：直接输入文件的完整URL地址
+1. 直接链接：输入文件的完整URL地址
 ```
 例如: https://example.com/path/to/file.zip
 ```
 
-2. 文件夹链接：输入 AList 中的文件夹路径
+2. GitHub 文件：支持访问仓库中的文件和目录
+```
+# 基本格式
+https://github.com/username/repo
+
+# 功能特点：
+- 支持浏览和下载仓库中的任意文件和目录
+- 支持指定分支访问（不指定则使用默认分支）
+- 支持私有仓库（需配置 GITHUB_TOKEN）
+
+
+# 使用示例：
+- 访问整个仓库：https://github.com/username/repo
+- 访问特定分支：https://github.com/username/repo 并在选项中指定分支名
+- 访问特定目录：https://github.com/username/repo 并在选项中指定目录路径
+```
+
+3. GitHub Releases：支持发布版本文件下载
+```
+# 基本格式
+https://github.com/username/repo
+
+# 功能特点：
+- 支持浏览所有发布版本
+- 支持指定版本标签（不指定则使用最新版本）
+- 支持私有仓库（需配置 GITHUB_TOKEN）
+
+# 使用方式：
+- 最新版本：直接输入仓库地址
+- 指定版本：输入仓库地址并在选项中指定版本标签
+- 快速模式：启用"跳过文件夹"选项可直接显示最新版本文件列表
+
+# 提示：
+配置 GITHUB_TOKEN 可以：
+- 提高 API 访问限制
+- 访问私有仓库内容
+- 避免触发 API 限流
+```
+
+4. AList 路径：输入 AList 中的文件夹路径
 ```
 例如: movies/2025 或 /movies/2025
 ```
